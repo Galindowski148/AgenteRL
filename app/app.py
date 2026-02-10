@@ -1,4 +1,3 @@
-
 import json
 import re
 import pandas as pd
@@ -14,12 +13,11 @@ COLLECTION = "dm_value_signals_1x2"
 # -----------------------------
 @st.cache_resource
 def get_db():
-    # Service account JSON viene en st.secrets["firebase"]["service_account_json"]
-    sa_json = st.secrets["firebase"]["service_account_json"]
-    if isinstance(sa_json, str):
-        sa = json.loads(sa_json)
-    else:
-        sa = sa_json
+    sa = dict(st.secrets["firebase"])  # ya viene como dict TOML
+
+    # Asegurar formato correcto de private_key
+    if "private_key" in sa and isinstance(sa["private_key"], str):
+        sa["private_key"] = sa["private_key"].replace("\\n", "\n")
 
     if not firebase_admin._apps:
         cred = credentials.Certificate(sa)
