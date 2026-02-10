@@ -126,7 +126,7 @@ with tab1:
         "cb_action","cb_stake","cb_pnl","cb_bank_after","cb_dd_after",
     ]
     cols_explorer = [c for c in cols_explorer if c in df_f.columns]
-    st.dataframe(df_f[cols_explorer], use_container_width=True, height=520)
+    st.dataframe(df_f[cols_explorer], width="stretch", height=520)
 
     csv = df_f[cols_explorer].to_csv(index=False).encode("utf-8")
     st.download_button("Descargar CSV (filtrado)", data=csv, file_name="explorador_filtrado.csv", mime="text/csv")
@@ -142,7 +142,7 @@ with tab2:
             top_ev = df_bets.sort_values("ev_cb", ascending=False, na_position="last")[
                 ["date","league","home_team","away_team","cb_action","cb_stake","ev_cb","edge_cb","cb_pnl","result"]
             ].head(20)
-            st.dataframe(top_ev, use_container_width=True, height=420)
+            st.dataframe(top_ev, width="stretch", height=420)
         with colB:
             st.write("Distribución EV (ev_cb)")
             st.bar_chart(df_bets["ev_cb"].dropna())
@@ -161,7 +161,7 @@ with tab3:
             dropna=False
         )
         st.write("Acción vs Resultado (conteos)")
-        st.dataframe(conf, use_container_width=True)
+        st.dataframe(conf, width="stretch")
 
         hit_rate = float((df_bets["cb_action"].astype(str).str.upper() == df_bets["result"].astype(str).str.upper()).mean())
         st.metric("Hit-rate (apuestas)", f"{hit_rate*100:,.2f}%")
@@ -178,7 +178,7 @@ with tab3:
         )
         by_league["roi_simple"] = by_league.apply(lambda r: (r["pnl_total"]/r["stake_total"]) if r["stake_total"] else 0.0, axis=1)
         st.write("KPIs por liga (solo apuestas)")
-        st.dataframe(by_league.sort_values("pnl_total", ascending=False), use_container_width=True, height=420)
+        st.dataframe(by_league.sort_values("pnl_total", ascending=False), width="stretch", height=420)
 
 with tab4:
     st.subheader("Bankroll & Riesgo")
